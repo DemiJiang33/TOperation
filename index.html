@@ -1,0 +1,154 @@
+<!-- index.html
+     Using ReactJs to do text operation
+     Name: Shanshan Jiang
+     -->
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Using ReactJs to do text operation</title>
+    <script src="js/react.js"></script>
+    <script src="js/react-dom.js"></script>
+    <script src="js/JSXTransformer.js"></script>
+    <link rel="stylesheet" href="css/index.css" media="all"/>
+</head>
+<body>
+    <div id="header">  
+            <h1 id="title">Using ReactJs to do text operation</h1>  
+    </div>
+    <div id="example1"></div>
+    <div id="example2"></div>
+    <div id="example3"></div>
+    <div id="lastModified">Last Modified: 10/17/2016</div>  
+    <div id="copyright">&copy; 2016 Shanshan Jiang</div>  
+    <script type="text/jsx">
+
+        var ReverseIndex = React.createClass({
+            render: function () {
+                return  <p>reverse : {this.props.name}</p>;
+        	}
+        });
+
+        var ReverseString=React.createClass({
+        	getInitialState:function(){
+        		return {value:''};
+        	},
+        	handleChange:function(event){
+        		this.setState({value:event.target.value.split('').reverse().join('')});
+        	},
+        	render:function(){
+        		return <div>
+                    <h1>Reserse a string</h1>
+        			<input type="text" onChange={this.handleChange} />
+        			<ReverseIndex name={this.state.value}></ReverseIndex>
+        		</div>;
+        	}
+        });
+
+
+        var PigLatinIndex=React.createClass({
+        	render: function () {
+                return  <p>result : {this.props.name}</p>;
+        	}
+        });
+
+        var PigLatin=React.createClass({
+        	getInitialState:function(){
+				return {value:''};
+        	},
+        	handleBlur:function(event){
+        		var first=-1;
+        		var firstvalue='';
+        		var content=event.target.value.split('');
+        		for(var i=0;i<content.length;i++){
+        			if('aeiou'.indexOf(content[i].toLowerCase())<0){
+        				firstvalue=content.splice(i,1,'').join('');
+        				first=i;
+        				break;
+        			}
+        		}
+        		if(first>=0){
+        			content.push('-'+firstvalue+'ay');
+        		}
+        		this.setState({value:content.join('')});
+        	},
+        	render:function(){
+        		return <div>
+                    <h1>Pig latin Translator</h1>
+                    <p>Pig Latin is a constructed language game in which words in English are altered according to a simple set of rules. Pig Latin takes the first consonant (or consonant cluster) of an English word, moves it to the end of the word and suffixes an ay.(For example, “banana” will be “anana-bay”）</p>
+        			<input type="text" onBlur={this.handleBlur} />
+        			<PigLatinIndex name={this.state.value}></PigLatinIndex>
+                    <input type="button" value="Translate now!" onClick={this.handleClick} />
+        		</div>;
+        	}
+        });
+
+
+        var CountCharIndex=React.createClass({
+        	render:function(){
+        		return <p>The number of words:{this.props.value}</p>
+        	}
+        });
+
+        var CountChar=React.createClass({
+        	getInitialState:function(){
+        		return {value:''};
+        	},
+        	HowManyWordInString:function(text){
+        		var text=text.split('');
+        		var isWord=false;
+        		var num=0;
+        		for(var i=0;i<text.length;i++){
+        			
+        		};
+        		text.forEach(function(value,index){
+        			if(value!=' '){
+        				isWord=true;
+        			}else if(isWord==true){
+        				isWord=false;
+        				num++;
+        			}
+        			if(index==text.length-1 && isWord==true){
+        				num++;
+        			}
+        		})
+        		return num;
+        	},
+        	handleChange:function(event){
+        		var text=event.target.value.split ('');
+        		var num=0;
+        		var re=/[a-zA-Z\s]/;
+        		var isChar=false;
+        		var start=-1;
+        		for(var i=0;i<text.length;i++){
+        			if(re.test(text[i])&&isChar==false){
+        				isChar=true;
+        				start=i;
+        			}else if(!re.test(text[i])&&isChar==true){
+        				isChar=false;
+        				num=num + this.HowManyWordInString(text.join('').slice(start,i));
+        			}
+        			if(i==text.length-1 && isChar==true ){
+        				num=num + this.HowManyWordInString(text.join('').slice(start,i+1));
+        			}
+        		};
+        		this.setState({value:num});
+        	},
+        	render:function(){
+        		return <div>
+                    <h1>The word count calculator</h1>
+        			<textarea onChange={this.handleChange}></textarea>
+        			<CountCharIndex value={this.state.value}></CountCharIndex>
+        		</div>
+        	},
+        });
+
+        React.render(<ReverseString></ReverseString>
+        ,document.getElementById('example1'));
+        React.render(<PigLatin></PigLatin>,document.getElementById('example2'));
+        React.render(<CountChar></CountChar>,document.getElementById('example3'));
+
+    </script>
+</body>
+</html>
