@@ -31,7 +31,7 @@
         	handleChange:function(event){
         		var text=event.target.value.split ('');
         		var num=0;
-        		var re=/[a-zA-Z\\-\\'\s]/;
+        		var re=/[a-zA-Z\"-\\'\s]/;
         		var isChar=false;
         		var start=-1;
         		for(var i=0;i<text.length;i++){
